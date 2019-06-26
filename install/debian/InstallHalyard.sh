@@ -274,6 +274,9 @@ function install_java() {
   elif [ "$ID" = "arch" ] || [ "$ID_LIKE" = "arch" ]; then
     echo "Running Arch Linux based distro ($PRETTY_NAME)"
     pacman -Sy --noconfirm java-runtime=8 ca-certificates-utils
+  elif [ "$ID" = "redhat" ] || [ "$VERSION_ID" = "7" ]; then
+    echo "Running Redhat Linux based distro ($PRETTY_NAME)"
+    yum install -y ca-certificates java-1.8.0-openjdk
   else
     >&2 echo "Distribution $PRETTY_NAME is not supported yet - please file an issue"
     >&2 echo "  https://github.com/spinnaker/halyard/issues"
@@ -295,7 +298,7 @@ function configure_bash_completion() {
     completion_script="/etc/bash_completion.d/hal"
 
     mkdir -p $(dirname $completion_script)
-    hal --print-bash-completion | tee $completion_script  > /dev/null
+    /usr/local/bin/hal --print-bash-completion | tee $completion_script  > /dev/null
 
     local bashrc
     if [ -z "$YES" ]; then
